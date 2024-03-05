@@ -1,17 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useState } from "react";
-import { useHttp } from "../../hooks/http.hook";
+
 import { v4 as uuidv4 } from "uuid";
-import { heroAdd } from "../heroesList/heroesSlice";
 import { selectAll } from "../heroesFilters/filtresSlice";
 import store from "../../store";
+import { useCreateHeroMutation } from "../../api/apiSlice";
 
 const HeroesAddForm = () => {
+
+	const [createHero, { isLoading, isFetching, isError }] = useCreateHeroMutation();
+
 	const [heroName, setHeroName] = useState('');
 	const [heroDescr, setHeroDescr] = useState('');
 	const [heroElem, setHeroElem] = useState('');
-	const dispatch = useDispatch();
-	const { request } = useHttp();
 	const { filtersLoadingStatus } = useSelector(state => state.filters)
 	const filters = selectAll(store.getState());
 
@@ -24,19 +25,17 @@ const HeroesAddForm = () => {
 			element: heroElem
 		}
 
-		request(`http://localhost:3001/heroes`, 'POST', JSON.stringify(newHero))
-			.then(data => console.log(data, 'Dispatch success'))
-			.then(dispatch(heroAdd(newHero)))
-			.catch(err => console.log(err));
+		createHero(newHero).unwrap();
+
 		setHeroName('')
 		setHeroDescr('')
 		setHeroElem('')
 	}
 
-	const renderFilters = (filters, status) => {
-		if (status === 'loading') {
+	const renderFilters = (filters) => {
+		if (isLoading && isFetching) {
 			return <option>Загрузка элемента</option>
-		} else if (status === 'error') {
+		} else if (isError) {
 			return <option>Ошибка загрузки</option>
 		}
 		if (filters && filters.length > 0) {
