@@ -24,12 +24,17 @@ export const apiSlice = createApi({
 				body: id,
 			}),
 			invalidatesTags: ['Heroes']
-		})
+		}),
+		getFilters: builder.query({
+			query: () => 'filters/',
+		}),
+
 	})
 })
 
 export const {
 	useGetHeroesQuery,
 	useCreateHeroMutation,
-	useDeleteHeroMutation
+	useDeleteHeroMutation,
+	useGetFiltersQuery,
 } = apiSlice;

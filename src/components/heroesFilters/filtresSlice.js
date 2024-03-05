@@ -34,7 +34,6 @@ const filtersSlice = createSlice({
 				filtersFetchingError: state => { state.filtersLoadingStatus = 'error' }, */
 		filtersChanged: (state, action) => {
 			state.activeFilter = action.payload;
-			/* state.activeFilter = action.payload; */
 		}
 	},
 	extraReducers: (builder) => {
@@ -43,7 +42,6 @@ const filtersSlice = createSlice({
 			.addCase(fetchFilters.fulfilled, (state, action) => {
 				state.filtersLoadingStatus = 'idle';
 				filtersAdapter.setAll(state, action.payload);
-				/* state.filters = action.payload */
 			})
 			.addCase(fetchFilters.rejected, state => { state.filtersLoadingStatus = 'error' })
 			.addDefaultCase(() => { })

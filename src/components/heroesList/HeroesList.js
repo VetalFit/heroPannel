@@ -31,6 +31,7 @@ const HeroesList = () => {
 		isError
 	} = useGetHeroesQuery();
 
+
 	const activeFilter = useSelector(state => state.filters.activeFilter);
 
 	const filteredHeroes = useMemo(() => {
@@ -41,8 +42,6 @@ const HeroesList = () => {
 			return filteredHeroes.filter(item => item.element === activeFilter)
 		}
 	}, [heroes, activeFilter])
-
-
 
 	const onDelete = useCallback((id) => {
 		deleteHero(id);
